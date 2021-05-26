@@ -69,7 +69,7 @@ To train on the custom dataset run:
 $ nohup python train.py --model_def config/yolov3-custom.cfg \
   --data_config config/custom.data \
   --pretrained_weights weights/darknet53.conv.74 \
-  --epochs 2000 > my.log 2>&1 &
+  --epochs 1000 > my.log0526 2>&1 &
 ```
 
 Add `--pretrained_weights weights/darknet53.conv.74` to train using a backend pretrained on ImageNet.
