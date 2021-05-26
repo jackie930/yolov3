@@ -5,40 +5,58 @@
  @Description    :
 """
 
-import xml.etree.ElementTree as ET
-import pickle
+import json
 import os
-from os import listdir, getcwd
-from os.path import join
+from shutil import copyfile
+from sys import exit
 
 sets = ['train', 'valid']
 
-classes = ["barcode"]  #
+classes = ["nie es8","maybach s650","toyota gt8","tesla modelx"]  #
 
+def load_vim_label(labelfile):
+    with open(labelfile, "r") as f:
+        annotations = json.load(f, encoding='unicode-escape')
+
+    image_list = annotations['_via_image_id_list']
+    print ("<<<image ls: ", image_list)
+    print (annotations)
+
+def preprocess(imgfolder,targetfolder):
+    image_list = os.listdir(imgfolder)
+    print ('total number:', len(image_list))
+
+    if not os.path.isdir(targetfolder):
+        os.makedirs(targetfolder)
+
+    for i in range(len(image_list)):
+        #print(image_list[i])
+        # 遍历所有文件
+        source = os.path.join(imgfolder, image_list[i])
+        target = os.path.join(targetfolder, str(i)+'.jpg')
+
+        # adding exception handling
+        try:
+            copyfile(source, target)
+        except IOError as e:
+            print("Unable to copy file. %s" % e)
+            exit(1)
+        except:
+            print("Unexpected error:", sys.exc_info())
+            exit(1)
+
+    print ("<<<< finish rename imgs!")
+
+if __name__ == "__main__":
+    # first make sure your images is preprocessed before labeling!
+    imgfolder = '/Users/liujunyi/Desktop/spottag/summit-training/道路/pics/imgs'
+    preprocess(imgfolder,'../data/custom/images')
+    #load_vim_label('../data/custom/labels/car-type.json')
+
+'''
 # sets generation
 image_list = os.listdir('../data/custom/images')
 label_list = os.listdir('../data/custom/labels')
-
-
-def rename(file, keyword):
-    ''' file: 文件路径    keyWord: 需要修改的文件中所包含的关键字 '''
-
-    # os.chdir(file)
-    items = os.listdir(file)
-    # print(os.getcwd())
-    for name in items:
-        print(name)
-        # 遍历所有文件
-        if not os.path.isdir(name):
-            if keyword in name:
-                new_name = name.replace(keyword, '')
-                os.renames(os.path.join(file, name), os.path.join(file, new_name))
-        else:
-            rename(file + '\\' + name, keyword)
-            # os.chdir('...')
-
-
-rename('../data/custom/labels', '.xml')
 
 images = [i[:-4] for i in image_list]
 print ("<<<<< length before", len(images))
@@ -73,3 +91,5 @@ for image_id in image_list:
 
 train_file.close()
 test_file.close()
+
+'''

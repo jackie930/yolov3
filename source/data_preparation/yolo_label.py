@@ -73,3 +73,4 @@ for image_id in image_list:
 
 train_file.close()
 test_file.close()
+
