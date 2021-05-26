@@ -11,6 +11,9 @@ A minimal PyTorch implementation of YOLOv3, with support for training, inference
     $ cd weights/
     $ bash download_weights.sh
 
+## data preparation
+to prepare the labeled data, refer to `data_preparation` folder, with label tools `index.html`, open this file, label your imgs and run `python vim_label.py`
+
 ## Train
 ```
 $ train.py [-h] [--epochs EPOCHS] [--batch_size BATCH_SIZE]
